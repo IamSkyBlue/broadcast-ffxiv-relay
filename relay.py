@@ -82,7 +82,7 @@ async def loop(servers, ShuntNames, zoneNames):
             info.extend(servers[str(relayObj["WorldId"])])
             zoneName = zoneNames[str(relayObj["ZoneId"])]
             if relayObj["InstanceId"] != 0:
-                zoneName += relayObj["InstanceId"] + 1
+                zoneName += str(relayObj["InstanceId"] + 1)
             info.append(zoneName)
             info.append(ShuntNames[str(relayObj["Id"])])
 
