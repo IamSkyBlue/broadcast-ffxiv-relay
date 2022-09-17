@@ -1,7 +1,6 @@
 import os
 import asyncio
 import aiohttp
-import requests
 import websockets
 import json
 import csv
