@@ -72,7 +72,7 @@ async def loop(servers, ShuntNames, zoneNames):
             if relayObj["Type"] != "Hunt":
                 continue
 
-            if relayObj["WorldId"] not in servers.keys():
+            if int(relayObj["WorldId"]) not in servers.keys():
                 continue
 
             info = []
