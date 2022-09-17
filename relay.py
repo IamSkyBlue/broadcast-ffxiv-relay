@@ -50,7 +50,7 @@ async def get_info():
             ShuntNames = {
                 key: item["Name"]["ChineseSimplified"]
                 for key, item in r.items()
-                if item["Name"] and item["Rank"] == 3
+                if item["Name"] and (item["Rank"] in [3, 4, 5])
             }
         async with client.get(zoneAssetUrl) as r:
             r = await r.json()
