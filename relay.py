@@ -90,7 +90,7 @@ async def loop(servers, ShuntNames, zoneNames):
                 if relayObj["CurrentHp"] == 0:
                     actorBuffer.remove(relayObj["ActorId"])
                     info.append("掛了")
-                    send_webhook(info)
+                    await send_webhook(info)
                 continue
 
             actorBuffer.append(relayObj["ActorId"])
