@@ -72,11 +72,14 @@ async def loop(servers, ShuntNames, zoneNames):
             if relayObj["Type"] != "Hunt":
                 continue
 
-            if relayObj["WorldId"] not in servers.keys():
+            if str(relayObj["Id"]) not in ShuntNames.keys():
+                continue
+
+            if str(relayObj["WorldId"]) not in servers.keys():
                 continue
 
             info = []
-            info.extend(servers[relayObj["WorldId"]])
+            info.extend(servers[str(relayObj["WorldId"])])
             zoneName = zoneNames[str(relayObj["ZoneId"])]
             if relayObj["InstanceId"] != 0:
                 zoneName += relayObj["InstanceId"] + 1
