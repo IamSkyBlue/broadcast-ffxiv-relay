@@ -68,15 +68,12 @@ async def loop(servers, ShuntNames, zoneNames):
         while True:
             msg = await websocket.recv()
             relayObj = json.loads(msg)
+
             if relayObj["Type"] != "Hunt":
                 continue
+
             if relayObj["WorldId"] not in servers.keys():
                 continue
-            if relayObj["ActorId"] in actorBuffer:
-                if relayObj["CurrentHp"] == 0:
-                    actorBuffer.remove(relayObj["ActorId"])
-                continue
-            actorBuffer.append(relayObj["ActorId"])
 
             info = []
             info.extend(servers[relayObj["WorldId"]])
@@ -85,6 +82,15 @@ async def loop(servers, ShuntNames, zoneNames):
                 zoneName += relayObj["InstanceId"] + 1
             info.append(zoneName)
             info.append(ShuntNames[str(relayObj["Id"])])
+
+            if relayObj["ActorId"] in actorBuffer:
+                if relayObj["CurrentHp"] == 0:
+                    actorBuffer.remove(relayObj["ActorId"])
+                    info.append("掛了")
+                    send_webhook(info)
+                continue
+
+            actorBuffer.append(relayObj["ActorId"])
             await send_webhook(info)
 
 
@@ -101,9 +107,11 @@ async def send_webhook(info):
                     print(row["nickname "], info)
 
 
-if __name__ == "__main__":
-    servers, ShuntNames, zoneNames = asyncio.get_event_loop().run_until_complete(
-        get_info()
-    )
+async def main():
+    servers, ShuntNames, zoneNames = await get_info()
     print("setup done.")
-    asyncio.get_event_loop().run_until_complete(loop(servers, ShuntNames, zoneNames))
+    await loop(servers, ShuntNames, zoneNames)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
