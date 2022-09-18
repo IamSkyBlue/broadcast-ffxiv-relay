@@ -1,5 +1,6 @@
 import os
 import asyncio
+from datetime import datetime
 import aiohttp
 import websockets
 import json
@@ -105,7 +106,10 @@ async def send_webhook(info, raw):
             rows = csv.DictReader(raw.splitlines(), delimiter=",")
             for row in rows:
                 if info[0] in row["datacenter "]:
+                    now = datetime.now().strftime("%m/%d %H:%M ")
+                    info[1] = "[" + info[1] + "]"
                     string = " ".join(info[1::])
+                    string = now + string
                     data = {"content": string, "raw": raw}
                     await client.post(row["url "], json=data)
                     print(row["nickname "], info)
