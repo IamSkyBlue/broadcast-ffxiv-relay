@@ -104,10 +104,10 @@ async def send_webhook(info, raw):
         async with client.get(csvUrl) as r:
             raw = await r.text(encoding="utf-8")
             rows = csv.DictReader(raw.splitlines(), delimiter=",")
+            info[1] = "[" + info[1] + "]"
             for row in rows:
                 if info[0] in row["datacenter "]:
                     now = datetime.now().strftime("%m/%d %H:%M ")
-                    info[1] = "[" + info[1] + "]"
                     string = " ".join(info[1::])
                     string = now + string
                     data = {"content": string, "raw": raw}
