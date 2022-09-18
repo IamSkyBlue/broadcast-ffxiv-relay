@@ -86,20 +86,20 @@ async def loop(servers, ShuntNames, zoneNames):
                 zoneName += str(relayObj["InstanceId"] + 1)
             info.append(zoneName)
             info.append(ShuntNames[str(relayObj["Id"])])
-            raw = {key: item for key, item in relayObj.items() if key != "ActorId"}
+            rawinfo = {key: item for key, item in relayObj.items() if key != "ActorId"}
 
             if relayObj["ActorId"] in actorBuffer:
                 if relayObj["CurrentHp"] == 0:
                     actorBuffer.remove(relayObj["ActorId"])
                     info.append("掛了")
-                    await send_webhook(info, raw)
+                    await send_webhook(info, rawinfo)
                 continue
 
             actorBuffer.append(relayObj["ActorId"])
-            await send_webhook(info, raw)
+            await send_webhook(info, rawinfo)
 
 
-async def send_webhook(info, raw):
+async def send_webhook(info, rawinfo):
     async with aiohttp.ClientSession() as client:
         async with client.get(csvUrl) as r:
             raw = await r.text(encoding="utf-8")
@@ -110,9 +110,9 @@ async def send_webhook(info, raw):
                     now = datetime.now().strftime("%m/%d %H:%M ")
                     string = " ".join(info[1::])
                     string = now + string
-                    data = {"content": string, "raw": raw}
+                    data = {"content": string, "raw": rawinfo}
                     await client.post(row["url "], json=data)
-                    print(row["nickname "], info, raw)
+                    print(row["nickname "], info, rawinfo)
 
 
 async def main():
