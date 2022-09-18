@@ -112,7 +112,7 @@ async def send_webhook(info, raw):
                     string = now + string
                     data = {"content": string, "raw": raw}
                     await client.post(row["url "], json=data)
-                    print(row["nickname "], info)
+                    print(row["nickname "], info, raw)
 
 
 async def main():
