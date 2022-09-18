@@ -86,7 +86,7 @@ async def loop(servers, ShuntNames, zoneNames):
                 zoneName += str(relayObj["InstanceId"] + 1)
             info.append(zoneName)
             info.append(ShuntNames[str(relayObj["Id"])])
-            raw = {key: item for key, item in relayObj if key != "ActorId"}
+            raw = {key: item for key, item in relayObj.items() if key != "ActorId"}
 
             if relayObj["ActorId"] in actorBuffer:
                 if relayObj["CurrentHp"] == 0:
