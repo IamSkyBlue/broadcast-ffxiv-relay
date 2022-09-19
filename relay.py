@@ -1,6 +1,6 @@
 import os
 import asyncio
-from datetime import datetime
+import datetime
 import aiohttp
 import websockets
 import json
@@ -107,7 +107,8 @@ async def send_webhook(info, rawinfo):
             info[1] = "[" + info[1] + "]"
             for row in rows:
                 if info[0] in row["datacenter "]:
-                    now = datetime.now().strftime("%m/%d %H:%M ")
+                    now = datetime.datetime.utcnow() + datetime.timedelta(hours = 8)
+                    now = now.strftime("%m/%d %H:%M ")
                     string = " ".join(info[1::])
                     string = now + string
                     data = {"content": string, "raw": rawinfo}
