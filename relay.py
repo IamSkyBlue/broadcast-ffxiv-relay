@@ -83,7 +83,7 @@ async def loop(servers, ShuntNames, zoneNames):
             info.extend(servers[str(relayObj["WorldId"])])
             zoneName = zoneNames[str(relayObj["ZoneId"])]
             if relayObj["InstanceId"] != 0:
-                zoneName += str(relayObj["InstanceId"] + 1)
+                zoneName += str(relayObj["InstanceId"])
             info.append(zoneName)
             info.append(ShuntNames[str(relayObj["Id"])])
             rawinfo = {key: item for key, item in relayObj.items() if key != "ActorId"}
@@ -107,7 +107,7 @@ async def send_webhook(info, rawinfo):
             info[1] = "[" + info[1] + "]"
             for row in rows:
                 if info[0] in row["datacenter "]:
-                    now = datetime.datetime.utcnow() + datetime.timedelta(hours = 8)
+                    now = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
                     now = now.strftime("%m/%d %H:%M ")
                     string = " ".join(info[1::])
                     string = now + string
