@@ -95,6 +95,9 @@ async def loop(servers, ShuntNames, zoneNames):
                     await send_webhook(info, rawinfo)
                 continue
 
+            if relayObj["CurrentHp"] == 0:
+                continue
+
             actorBuffer.append(relayObj["ActorId"])
             await send_webhook(info, rawinfo)
 
