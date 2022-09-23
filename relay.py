@@ -18,7 +18,7 @@ serversAsstUrl = "https://raw.githubusercontent.com/IamSkyBlue/broadcast-ffxiv-r
 async def get_info():
     async with aiohttp.ClientSession() as client:
         async with client.get(serversAsstUrl) as r:
-            servers = await r.json()
+            servers = await r.json(content_type="text/plain")
         async with client.get(huntAssetUrl) as r:
             r = await r.json()
             ShuntNames = {
