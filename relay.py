@@ -86,6 +86,13 @@ async def loop(servers, ShuntNames, zoneNames):
                 zoneName += str(relayObj["InstanceId"])
             info.append(zoneName)
             info.append(ShuntNames[str(relayObj["Id"])])
+            info.extend(
+                [
+                    "X:" + str(relayObj["Coords"]["X"]),
+                    "Y:" + str(relayObj["Coords"]["Y"]),
+                    "Z:" + str(relayObj["Coords"]["Z"]),
+                ]
+            )
             rawinfo = {key: item for key, item in relayObj.items() if key != "ActorId"}
 
             if relayObj["ActorId"] in actorBuffer:
