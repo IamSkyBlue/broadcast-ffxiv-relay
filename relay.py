@@ -61,10 +61,8 @@ async def loop(servers, ShuntNames, zoneNames):
             info.append(ShuntNames[str(relayObj["Id"])])
             info.extend(
                 [
-                    "X:"
-                    + "{:2.1f}".format(str(RawToFlagCoord(relayObj["Coords"]["X"]))),
-                    "Y:"
-                    + "{:2.1f}".format(str(RawToFlagCoord(relayObj["Coords"]["Y"]))),
+                    "X:" + "{:2.1f}".format(RawToFlagCoord(relayObj["Coords"]["X"])),
+                    "Y:" + "{:2.1f}".format(RawToFlagCoord(relayObj["Coords"]["Y"])),
                 ]
             )
             rawinfo = {key: item for key, item in relayObj.items() if key != "ActorId"}
