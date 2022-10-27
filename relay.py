@@ -104,7 +104,7 @@ async def main():
     await loop(servers, ShuntNames, zoneNames)
 
 def RawToFlagCoord(raw):
-    return ((41 / raw) * ((raw + 1024) / 2048)) + 1
+    return (41 * ((raw + 1024) / 2048)) + 1
 
 
 if __name__ == "__main__":
