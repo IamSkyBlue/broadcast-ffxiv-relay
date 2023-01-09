@@ -85,17 +85,18 @@ async def send_webhook(info, rawinfo):
     async with aiohttp.ClientSession() as client:
         async with client.get(csvUrl) as r:
             raw = await r.text(encoding="utf-8")
+            raw.replace(' "', '"')
             rows = csv.DictReader(raw.splitlines(), delimiter=",")
             info[1] = "[" + info[1] + "]"
             for row in rows:
-                if info[0] in row["datacenter "]:
+                if info[0] in row["datacenter"]:
                     now = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
                     now = now.strftime("%m/%d %H:%M ")
                     string = " ".join(info[1::])
                     string = now + string
                     data = {"content": string, "raw": rawinfo}
-                    await client.post(row["url "], json=data)
-                    print(row["nickname "], info, rawinfo)
+                    await client.post(row["url"], json=data)
+                    print(row["nickname"], info, rawinfo)
 
 
 async def main():
