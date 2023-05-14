@@ -22,16 +22,16 @@ async def get_info():
         async with client.get(huntAssetUrl) as r:
             r = await r.json()
             ShuntNames = {
-                key: item["Name"]["ChineseSimplified"]
+                key: item["Name"]
                 for key, item in r.items()
                 if item["Name"] and (item["Rank"] in [3, 4, 5])
             }
         async with client.get(zoneAssetUrl) as r:
             r = await r.json()
             zoneNames = {
-                key: item["Name"]["ChineseSimplified"]
+                key: item["Name"]
                 for key, item in r.items()
-                if item["Name"] and "ChineseSimplified" in item["Name"]
+                if item["Name"]
             }
     return servers, ShuntNames, zoneNames
 
@@ -70,18 +70,17 @@ async def loop(servers, ShuntNames, zoneNames):
             if relayObj["ActorId"] in actorBuffer:
                 if relayObj["CurrentHp"] == 0:
                     actorBuffer.remove(relayObj["ActorId"])
-                    info.append("掛了")
-                    await send_webhook(info, rawinfo)
+                    await send_webhook(info, rawinfo, True)
                 continue
 
             if relayObj["CurrentHp"] == 0:
                 continue
 
             actorBuffer.append(relayObj["ActorId"])
-            await send_webhook(info, rawinfo)
+            await send_webhook(info, rawinfo, False)
 
 
-async def send_webhook(info, rawinfo):
+async def send_webhook(info, rawinfo, isDead):
     async with aiohttp.ClientSession() as client:
         async with client.get(csvUrl) as r:
             raw = await r.text(encoding="utf-8")
@@ -90,10 +89,16 @@ async def send_webhook(info, rawinfo):
             info[1] = "[" + info[1] + "]"
             for row in rows:
                 if info[0] in row["datacenter"]:
-                    now = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
+                    now = datetime.datetime.utcnow() + datetime.timedelta(hours=int(row["timezone"]))
                     now = now.strftime("%m/%d %H:%M ")
-                    string = " ".join(info[1::])
-                    string = now + string
+                    language = row["language"]
+                    string1 = " ".join([str[language] for str in info[2:3]])
+                    string2 = " ".join(info[4::])
+                    if row["language"] == "English":
+                        isDeadstr = "is dead"
+                    else:
+                        isDeadstr = "掛了"
+                    string = now + " " +info[1] + " " + string1 + " " + string2 + " " + isDeadstr
                     data = {"content": string, "raw": rawinfo}
                     await client.post(row["url"], json=data)
                     print(row["nickname"], info, rawinfo)
