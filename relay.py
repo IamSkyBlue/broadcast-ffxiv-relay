@@ -100,7 +100,7 @@ async def send_webhook(info, rawinfo, isDead):
                         isDeadstr = "掛了"
                     string = now + " " +info[1] + " " + string1 + " " + string2
                     if isDead:
-                        string + " " + isDeadstr
+                        string += " " + isDeadstr
                     data = {"content": string, "raw": rawinfo}
                     await client.post(row["url"], json=data)
                     print(row["nickname"], info, rawinfo)
