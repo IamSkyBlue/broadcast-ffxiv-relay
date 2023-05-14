@@ -92,7 +92,7 @@ async def send_webhook(info, rawinfo, isDead):
                     now = datetime.datetime.utcnow() + datetime.timedelta(hours=int(row["timezone"]))
                     now = now.strftime("%m/%d %H:%M ")
                     language = row["language"]
-                    string1 = " ".join([str[language] for str in info[2:3]])
+                    string1 = " ".join([str[language] for str in info[2:4]])
                     string2 = " ".join(info[4::])
                     if row["language"] == "English":
                         isDeadstr = "is dead"
