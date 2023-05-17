@@ -1,4 +1,5 @@
 import os
+import copy
 import asyncio
 import datetime
 import aiohttp
@@ -50,10 +51,10 @@ async def loop(servers, ShuntNames, zoneNames):
 
             info = []
             info.extend(servers[str(relayObj["WorldId"])])
-            zoneName = zoneNames[str(relayObj["ZoneId"])]
+            zoneName = copy.deepcopy(zoneNames[str(relayObj["ZoneId"])])
             if relayObj["InstanceId"] != 0:
-                for zoneNameStr in zoneName:
-                    zoneName[zoneNameStr] += str(relayObj["InstanceId"])
+                for zoneNamelan in zoneName:
+                    zoneName[zoneNamelan] += str(relayObj["InstanceId"])
             info.append(zoneName)
             info.append(ShuntNames[str(relayObj["Id"])])
             info.extend(
