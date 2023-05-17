@@ -54,7 +54,6 @@ async def loop(servers, ShuntNames, zoneNames):
             if relayObj["InstanceId"] != 0:
                 for zoneNameStr in zoneName:
                     zoneName[zoneNameStr] += str(relayObj["InstanceId"])
-                zoneName += str(relayObj["InstanceId"])
             info.append(zoneName)
             info.append(ShuntNames[str(relayObj["Id"])])
             info.extend(
