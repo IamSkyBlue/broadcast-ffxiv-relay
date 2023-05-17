@@ -28,11 +28,7 @@ async def get_info():
             }
         async with client.get(zoneAssetUrl) as r:
             r = await r.json()
-            zoneNames = {
-                key: item["Name"]
-                for key, item in r.items()
-                if item["Name"]
-            }
+            zoneNames = {key: item["Name"] for key, item in r.items() if item["Name"]}
     return servers, ShuntNames, zoneNames
 
 
@@ -56,6 +52,8 @@ async def loop(servers, ShuntNames, zoneNames):
             info.extend(servers[str(relayObj["WorldId"])])
             zoneName = zoneNames[str(relayObj["ZoneId"])]
             if relayObj["InstanceId"] != 0:
+                for zoneNameStr in zoneName:
+                    zoneName[zoneNameStr] += str(relayObj["InstanceId"])
                 zoneName += str(relayObj["InstanceId"])
             info.append(zoneName)
             info.append(ShuntNames[str(relayObj["Id"])])
@@ -89,7 +87,9 @@ async def send_webhook(info, rawinfo, isDead):
             info[1] = "[" + info[1] + "]"
             for row in rows:
                 if info[0] in row["datacenter"]:
-                    now = datetime.datetime.utcnow() + datetime.timedelta(hours=int(row["timezone"]))
+                    now = datetime.datetime.utcnow() + datetime.timedelta(
+                        hours=int(row["timezone"])
+                    )
                     now = now.strftime("%m/%d %H:%M ")
                     language = row["language"]
                     string1 = " ".join([str[language] for str in info[2:4]])
@@ -98,7 +98,7 @@ async def send_webhook(info, rawinfo, isDead):
                         isDeadstr = "is dead"
                     else:
                         isDeadstr = "掛了"
-                    string = now + " " +info[1] + " " + string1 + " " + string2
+                    string = now + " " + info[1] + " " + string1 + " " + string2
                     if isDead:
                         string += " " + isDeadstr
                     data = {"content": string, "raw": rawinfo}
