@@ -37,7 +37,11 @@ async def loop(servers, ShuntNames, zoneNames):
     async with websockets.connect(feedUrl, ping_timeout=None) as websocket:
         actorBuffer = []
         while True:
-            msg = await websocket.recv()
+            try:
+                msg = await websocket.recv()
+            except Exception as e:
+                print(f"An unexpected error occurred: {e}")
+                break
             relayObj = json.loads(msg)
 
             if relayObj["Type"] != "Hunt":
@@ -112,7 +116,8 @@ async def send_webhook(info, rawinfo, isDead):
 async def main():
     servers, ShuntNames, zoneNames = await get_info()
     print("setup done.")
-    await loop(servers, ShuntNames, zoneNames)
+    while True:
+        await loop(servers, ShuntNames, zoneNames)
 
 
 def RawToFlagCoord(raw):
