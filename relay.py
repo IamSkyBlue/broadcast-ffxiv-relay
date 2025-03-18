@@ -79,7 +79,7 @@ async def loop(servers, ShuntNames, zoneNames):
 
 
 async def send_webhook(info, rawinfo, isDead):
-    async with aiohttp.ClientSession() as client:
+    async with aiohttp.ClientSession(ping_timeout=None) as client:
         async with client.get(csvUrl) as r:
             raw = await r.text(encoding="utf-8")
             raw.replace(' "', '"')
