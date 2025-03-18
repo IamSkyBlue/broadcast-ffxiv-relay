@@ -102,7 +102,10 @@ async def send_webhook(info, rawinfo, isDead):
                     if isDead:
                         string += " " + isDeadstr
                     data = {"content": string, "raw": rawinfo}
-                    await client.post(row["url"], json=data)
+                    try:
+                        await client.post(row["url"], json=data)
+                    except Exception as e:
+                        print(f"An unexpected error occurred: {e}")
                     print(row["nickname"], info, rawinfo)
 
 
